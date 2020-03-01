@@ -5,41 +5,33 @@ axios.defaults.withCredentials = true;
 axios.defaults.baseURL = 'http://localhost:8000';
 
 const Login = () => {
+  const [user, setUser] = React.useState(null);
+
   return (
-    <form
-      className="login"
-      onSubmit={(e) => {
-        e.preventDefault();
+    <div>
+      {user && <h3>{JSON.stringify(user, null, 4)}</h3>}
+      <form
+        className="login"
+        onSubmit={async (e) => {
+          e.preventDefault();
 
-        axios('/airlock/csrf-cookie').then((response) => {
-          axios
-            .post(
-              '/login',
-              {
-                email: 'your@email.com',
-                password: 'Your Password'
-              },
-              {
-                headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json'
-                }
-              }
-            )
-            .then((response) => {
-              axios('/api/user')
-                .then((response) => {
-                  console.log(response.data);
-                })
-                .then(console.log);
-            });
-        });
-      }}
-    >
-      <h2>The info is ready, just hit submit</h2>
+          await axios('/airlock/csrf-cookie');
 
-      <button type="submit">Submit</button>
-    </form>
+          await axios.post('/login', {
+            email: 'your@email.com',
+            password: 'Your Password'
+          });
+
+          const response = await axios('/api/user');
+
+          setUser(response.data);
+        }}
+      >
+        <h2>The info is ready, just hit submit</h2>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
   );
 };
 
