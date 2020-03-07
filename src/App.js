@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import Login from './Login';
+import Protected from './Protected';
 import './App.css';
 
 function App() {
@@ -30,7 +31,7 @@ function App() {
             </Route>
 
             <Route path="/protected">
-              <h1>Protected</h1>
+              <Protected />
             </Route>
 
             <Route path="/">
